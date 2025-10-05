@@ -11,8 +11,10 @@ public class Player : MonoBehaviour
 	[SerializeField] float moveSpeed  =1f;
 	[SerializeField] float rotationSpeed = 45f;
 
+	[SerializeField] Transform tankTowerTr;
 	[SerializeField] Transform bulletSpawnPosTr;
 	[SerializeField] GameObject pfBullet;
+	[SerializeField] Transform targetTr;
 	[SerializeField] LayerMask layerMask;
 
 	private void Awake()
@@ -41,6 +43,10 @@ public class Player : MonoBehaviour
 		if(vel.z.zero() == false)
 			transform.localEulerAngles += Vector3.up * turn_vel * Time.deltaTime;
 		rb.velocity = transform.forward * vel.z;
+
+		Vector3 targetVec3 = this.targetTr.position - this.transform.position; targetVec3.y = 0f;
+		Quaternion targetRotation = Quaternion.LookRotation(targetVec3);
+		this.tankTowerTr.rotation = targetRotation;
 
 		//
 		line.a = Vector3.zero;
