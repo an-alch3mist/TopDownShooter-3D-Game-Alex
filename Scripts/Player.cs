@@ -5,80 +5,91 @@ using UnityEngine;
 using SPACE_UTIL;
 using SPACE_DrawSystem;
 
-public class Player : MonoBehaviour
+namespace SPACE_CrashCourse
 {
-	[SerializeField] Rigidbody rb;
-	[SerializeField] float moveSpeed  =1f;
-	[SerializeField] float rotationSpeed = 45f;
-
-	[SerializeField] Transform tankTowerTr;
-	[SerializeField] Transform bulletSpawnPosTr;
-	[SerializeField] GameObject pfBullet;
-	[SerializeField] Transform targetTr;
-	[SerializeField] LayerMask layerMask;
-
-	private void Awake()
+	public class Player : MonoBehaviour
 	{
-		Debug.Log("Awake(): " + this);
-		line = new Line(name: "position-line");
-		rayLine = new Line(name: "ray-line");
-	}
+		[SerializeField] Rigidbody rb;
+		[SerializeField] float moveSpeed = 1f;
+		[SerializeField] float rotationSpeed = 45f;
 
-	Line line;
-	Line rayLine;
+		[SerializeField] Transform tankTowerTr;
+		[SerializeField] Transform bulletSpawnPosTr;
+		[SerializeField] GameObject pfBullet;
+		[SerializeField] Transform targetTr;
+		[SerializeField] LayerMask layerMask;
 
-	private void Update()
-	{
-		Vector3 vel = new Vector3()
+		private void Awake()
 		{
-			x = 0f,
-			y = 0f,
-			z = Input.GetAxisRaw("Vertical"),
-		} * this.moveSpeed;
+			Debug.Log("Awake(): " + this);
+			line = new Line(name: "position-line");
+			rayLine = new Line(name: "ray-line");
+		}
 
-		float turn_vel = rotationSpeed * Input.GetAxisRaw("Horizontal");
-		if (vel.z < 0f)
-			turn_vel *= -1;
+		Line line;
+		Line rayLine;
 
-		if(vel.z.zero() == false)
-			transform.localEulerAngles += Vector3.up * turn_vel * Time.deltaTime;
-		rb.velocity = transform.forward * vel.z;
-
-		Vector3 targetVec3 = this.targetTr.position - this.transform.position; targetVec3.y = 0f;
-		Quaternion targetRotation = Quaternion.LookRotation(targetVec3);
-		this.tankTowerTr.rotation = targetRotation;
-
-		//
-		line.a = Vector3.zero;
-		line.b = this.transform.position;
-		line.e = 1f/50;
-
-		#region RayCast
-		Ray ray = new Ray(this.bulletSpawnPosTr.position, this.bulletSpawnPosTr.forward);
-		RaycastHit hit;
-		//
-		if (Physics.Raycast(ray, out hit, 100f, this.layerMask))
+		private void Update()
 		{
-			rayLine.a = ray.origin;
-			rayLine.b = hit.point;
-			rayLine.e = 1f / 50;
-
-			// fire >>
-			if(INPUT.M.InstantDown(0))
+			Vector3 vel = new Vector3()
 			{
-				GameObject bullet = GameObject.Instantiate(this.pfBullet, C.PrefabHolder);
-				bullet.name = "bullet";
-				bullet.transform.position = this.bulletSpawnPosTr.position;
-				bullet.transform.rotation = this.bulletSpawnPosTr.rotation;
-				bullet.GetComponent<Bullet>().Launch();
-			}
-			// << fire
-		}
-		else
-		{
-			rayLine.Clear();
-		}
-		#endregion
-	}
+				x = 0f,
+				y = 0f,
+				z = Input.GetAxisRaw("Vertical"),
+			} * this.moveSpeed;
 
+			float turn_vel = rotationSpeed * Input.GetAxisRaw("Horizontal");
+			if (vel.z < 0f)
+				turn_vel *= -1;
+
+			if (vel.z.zero() == false)
+				transform.localEulerAngles += Vector3.up * turn_vel * Time.deltaTime;
+			rb.velocity = transform.forward * vel.z;
+
+			Vector3 targetVec3 = this.targetTr.position - this.transform.position; targetVec3.y = 0f;
+			Quaternion targetRotation = Quaternion.LookRotation(targetVec3);
+			this.tankTowerTr.rotation = targetRotation;
+
+			//
+			line.a = Vector3.zero;
+			line.b = this.transform.position;
+			line.e = 1f / 50;
+
+			#region RayCast
+			Ray ray = new Ray(this.bulletSpawnPosTr.position, this.bulletSpawnPosTr.forward);
+			RaycastHit hit;
+			//
+			if (Physics.Raycast(ray, out hit, 100f, this.layerMask))
+			{
+				rayLine.a = ray.origin;
+				rayLine.b = hit.point;
+				rayLine.e = 1f / 50;
+
+				// fire >>
+				if (INPUT.M.InstantDown(0))
+				{
+					GameObject bullet = GameObject.Instantiate(this.pfBullet, C.PrefabHolder);
+					bullet.name = "bullet";
+					bullet.transform.position = this.bulletSpawnPosTr.position;
+					bullet.transform.rotation = this.bulletSpawnPosTr.rotation;
+					Launch(bullet, this.bulletSpeed);
+				}
+				// << fire
+			}
+			else
+			{
+				rayLine.Clear();
+			}
+			#endregion
+		}
+
+
+		float bulletSpeed = 1000f;
+		static void Launch(GameObject objBullet, float speed)
+		{
+			Rigidbody rb = objBullet.GC<Rigidbody>();
+			rb.AddForce(objBullet.transform.forward * speed);
+		}
+
+	}
 }
