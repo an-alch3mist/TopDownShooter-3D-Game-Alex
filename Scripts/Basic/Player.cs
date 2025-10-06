@@ -47,8 +47,7 @@ namespace SPACE_CrashCourse
 			rb.velocity = transform.forward * vel.z;
 
 			Vector3 targetVec3 = this.targetTr.position - this.transform.position; targetVec3.y = 0f;
-			Quaternion targetRotation = Quaternion.LookRotation(targetVec3);
-			this.tankTowerTr.rotation = targetRotation;
+			this.tankTowerTr.rotation = Quaternion.LookRotation(targetVec3);
 
 			//
 			line.a = Vector3.zero;
