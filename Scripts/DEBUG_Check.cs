@@ -14,6 +14,7 @@ public class DEBUG_Check : MonoBehaviour
 			// instant up	: was released this frame
 			// held			: is pressed
 		*/
+
 		if (keyboard != null)
 		{
 			if (keyboard.spaceKey.wasPressedThisFrame) Debug.Log("space instant down");
