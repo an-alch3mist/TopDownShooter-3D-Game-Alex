@@ -10,21 +10,20 @@ namespace SPACE_TopDownShooter
 {
 	public class PlayerMovement : MonoBehaviour
 	{
-		private PlayerInputActions _IA;
 		private CharacterController _characterC;
 		[SerializeField] float _floorWalkMovementSpeed = 2f;
 		[SerializeField] float _floorRunMovementSpeed = 5.5f;
 		[SerializeField] LayerMask _aimLayer;
 
+		[SerializeField] PlayerInput _playerInput;
 		[SerializeField] Animator _animator;
 		[SerializeField] Transform aimTr;
 
 		Line dirLine;
 
-		private void Awake()
+		private void Start()
 		{
-			Debug.Log("Awake(): " + this);
-			_IA = new PlayerInputActions();
+			Debug.Log("Start(): " + this);
 			this.InitIAEvents();
 
 			this._characterC = this.gameObject.GC<CharacterController>();
@@ -53,10 +52,26 @@ namespace SPACE_TopDownShooter
 				Vector3 targetDir = hitInfo.point - this.transform.position; targetDir.y = 0f;
 				this.transform.rotation = Quaternion.LookRotation(targetDir);
 
-				// just to log >>
-				aimTr.position = hitInfo.point;
-				// << just to log
-			} 
+				// just to log + aim rig >>
+				Vector3 targerAim = new Vector3()
+				{
+					x = hitInfo.point.x,
+					z = hitInfo.point.z,
+					y = (this.transform.position.y + 1f),
+				};
+
+				#region // clamp aimTr.position
+				/*
+				Vector3 aimXZ = new Vector3(targerAim.x, 0f, targerAim.z);
+				Vector3 characterXZ = new Vector3(this.transform.position.x, 0f, this.transform.position.z);
+
+				if (Vector3.Magnitude(aimXZ - characterXZ) > 0.5f) // clamp 
+					this.aimTr.position = targerAim;
+				*/
+				#endregion
+				this.aimTr.position = targerAim;
+				// << just to log + aim rig
+			}
 			#endregion
 
 			//
@@ -116,19 +131,7 @@ namespace SPACE_TopDownShooter
 			this._animator.SetFloat("zVel", zVel);
 		}
 
-		#region Shoot
-		void HandleShoot()
-		{
-			Debug.Log("Shoot()");
-			this.HandleAnimationControllerShoot();
-		}
-		#endregion
-
-		void HandleAnimationControllerShoot()
-		{
-			this._animator.SetTrigger("Fire");
-		}
-
+		[Header("just to log")]
 		[SerializeField] Vector2 inputMovementDir;
 		[SerializeField] bool isRunning;
 		Vector3 movementVel;
@@ -136,7 +139,7 @@ namespace SPACE_TopDownShooter
 		#region InitIAEvents
 		void InitIAEvents()
 		{
-			_IA.Character.Fire.performed += (ctx) => { this.HandleShoot(); };
+			var _IA = this._playerInput.IA;
 
 			_IA.Character.Movement.performed += ctx => this.inputMovementDir = ctx.ReadValue<Vector2>();
 			_IA.Character.Movement.canceled += ctx => this.inputMovementDir = Vector2.zero;
@@ -148,14 +151,5 @@ namespace SPACE_TopDownShooter
 			_IA.Character.Run.canceled += (ctx) => { this.isRunning = false; };
 		}
 		#endregion
-
-		private void OnEnable()
-		{
-			_IA.Enable();
-		}
-		private void OnDisable()
-		{
-			_IA.Disable();
-		}
 	}
 }

@@ -62,6 +62,15 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""switchWeapon"",
+                    ""type"": ""Button"",
+                    ""id"": ""d34e0518-5784-4ece-9608-77bcacd23409"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -163,6 +172,17 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""action"": ""Run"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0f9f3ed9-0997-4805-9a77-56335e35be93"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""switchWeapon"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -175,6 +195,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         m_Character_Movement = m_Character.FindAction("Movement", throwIfNotFound: true);
         m_Character_Aim = m_Character.FindAction("Aim", throwIfNotFound: true);
         m_Character_Run = m_Character.FindAction("Run", throwIfNotFound: true);
+        m_Character_switchWeapon = m_Character.FindAction("switchWeapon", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -240,6 +261,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Character_Movement;
     private readonly InputAction m_Character_Aim;
     private readonly InputAction m_Character_Run;
+    private readonly InputAction m_Character_switchWeapon;
     public struct CharacterActions
     {
         private @PlayerInputActions m_Wrapper;
@@ -248,6 +270,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         public InputAction @Movement => m_Wrapper.m_Character_Movement;
         public InputAction @Aim => m_Wrapper.m_Character_Aim;
         public InputAction @Run => m_Wrapper.m_Character_Run;
+        public InputAction @switchWeapon => m_Wrapper.m_Character_switchWeapon;
         public InputActionMap Get() { return m_Wrapper.m_Character; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -269,6 +292,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @Run.started += instance.OnRun;
             @Run.performed += instance.OnRun;
             @Run.canceled += instance.OnRun;
+            @switchWeapon.started += instance.OnSwitchWeapon;
+            @switchWeapon.performed += instance.OnSwitchWeapon;
+            @switchWeapon.canceled += instance.OnSwitchWeapon;
         }
 
         private void UnregisterCallbacks(ICharacterActions instance)
@@ -285,6 +311,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @Run.started -= instance.OnRun;
             @Run.performed -= instance.OnRun;
             @Run.canceled -= instance.OnRun;
+            @switchWeapon.started -= instance.OnSwitchWeapon;
+            @switchWeapon.performed -= instance.OnSwitchWeapon;
+            @switchWeapon.canceled -= instance.OnSwitchWeapon;
         }
 
         public void RemoveCallbacks(ICharacterActions instance)
@@ -308,5 +337,6 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         void OnMovement(InputAction.CallbackContext context);
         void OnAim(InputAction.CallbackContext context);
         void OnRun(InputAction.CallbackContext context);
+        void OnSwitchWeapon(InputAction.CallbackContext context);
     }
 }
