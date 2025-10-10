@@ -45,13 +45,11 @@ namespace SPACE_TopDownShooter
 			dirLine.b = this.transform.position + this.movementVel * 10;
 			#endregion
 
-			#region Rotation
+			
+			#region transform.rotation
 			Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 			if (Physics.Raycast(ray, out var hitInfo, (float)1e3, this._aimLayer) == true)
 			{
-				Vector3 targetDir = hitInfo.point - this.transform.position; targetDir.y = 0f;
-				this.transform.rotation = Quaternion.LookRotation(targetDir);
-
 				// just to log + aim rig >>
 				Vector3 targerAim = new Vector3()
 				{
@@ -60,19 +58,17 @@ namespace SPACE_TopDownShooter
 					y = (this.transform.position.y + 1f),
 				};
 
-				#region // clamp aimTr.position
-				/*
-				Vector3 aimXZ = new Vector3(targerAim.x, 0f, targerAim.z);
-				Vector3 characterXZ = new Vector3(this.transform.position.x, 0f, this.transform.position.z);
-
-				if (Vector3.Magnitude(aimXZ - characterXZ) > 0.5f) // clamp 
+				float dist = Vector3.Magnitude(targerAim.xz() - this.transform.position.xz());
+				if (dist > 0.5f)
+				{
+					Vector3 targetDir = hitInfo.point - this.transform.position; targetDir.y = 0f;
+					this.transform.rotation = Quaternion.LookRotation(targetDir);
 					this.aimTr.position = targerAim;
-				*/
-				#endregion
-				this.aimTr.position = targerAim;
+				}
 				// << just to log + aim rig
 			}
 			#endregion
+			
 
 			//
 			this.HandleAnimationControllerXZ();

@@ -1,6 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using SPACE_UTIL;
+
+using SPACE_TopDownShooter.ID;
 
 namespace SPACE_TopDownShooter
 {
@@ -8,6 +11,7 @@ namespace SPACE_TopDownShooter
 	{
 		[SerializeField] PlayerInput _playerInput;
 		[SerializeField] Transform _pistol, _revolver, _autoRifle, _shotGun, _sniper;
+		[SerializeField] Transform _LeftHandIK_Target;
 
 		private void Start()
 		{
@@ -45,6 +49,11 @@ namespace SPACE_TopDownShooter
 				if (i0 == currIndex) this.WEAPON[i0].gameObject.SetActive(true);
 				else this.WEAPON[i0].gameObject.SetActive(false);
 			}
+
+			Transform LeftIKTarget_fromID = this.WEAPON[currIndex].gameObject.GC_InLeaf<ID_LeftHandIKTarget>().transform;
+			this._LeftHandIK_Target.position = LeftIKTarget_fromID.position;
+			this._LeftHandIK_Target.eulerAngles = LeftIKTarget_fromID.eulerAngles;
+
 			currIndex = (currIndex + 1) % this.WEAPON.Length;
 		}
 	}

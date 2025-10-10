@@ -22,5 +22,4 @@ namespace SPACE_TopDownShooter
 			IA.Disable();
 		}
 	}
-
 }
