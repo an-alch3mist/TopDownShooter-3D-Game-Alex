@@ -32,7 +32,7 @@ namespace SPACE_TopDownShooter
 
 		void HandleAnimationControllerShoot()
 		{
-			this._animator.SetTrigger("Fire");
+			this._animator.SetTrigger("fire");
 		}
 
 	}

@@ -13,6 +13,7 @@ namespace SPACE_TopDownShooter
 		private CharacterController _characterC;
 		[SerializeField] float _floorWalkMovementSpeed = 2f;
 		[SerializeField] float _floorRunMovementSpeed = 5.5f;
+		[SerializeField] float _botHeight = 1.8f;
 		[SerializeField] LayerMask _aimLayer;
 
 		[SerializeField] PlayerInput _playerInput;
@@ -55,7 +56,7 @@ namespace SPACE_TopDownShooter
 				{
 					x = hitInfo.point.x,
 					z = hitInfo.point.z,
-					y = (this.transform.position.y + 1f),
+					y = (this.transform.position.y + this._botHeight * 0.75f),
 				};
 
 				float dist = Vector3.Magnitude(targerAim.xz() - this.transform.position.xz());
