@@ -1661,6 +1661,71 @@ Transform:
   m_Father: {fileID: 1941417929}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &696829801
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: 7934b4ee00a8d1d4aab8b6401b736dad, type: 3}
+      propertyPath: m_RootOrder
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 7934b4ee00a8d1d4aab8b6401b736dad, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.017
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 7934b4ee00a8d1d4aab8b6401b736dad, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 7934b4ee00a8d1d4aab8b6401b736dad, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -2.683
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 7934b4ee00a8d1d4aab8b6401b736dad, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 7934b4ee00a8d1d4aab8b6401b736dad, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 7934b4ee00a8d1d4aab8b6401b736dad, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 7934b4ee00a8d1d4aab8b6401b736dad, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 7934b4ee00a8d1d4aab8b6401b736dad, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 7934b4ee00a8d1d4aab8b6401b736dad, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 7934b4ee00a8d1d4aab8b6401b736dad, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 7934b4ee00a8d1d4aab8b6401b736dad, type: 3}
+      propertyPath: m_Name
+      value: Bot @Rifle  Rifle Aiming Idle --skin
+      objectReference: {fileID: 0}
+    - target: {fileID: 5866666021909216657, guid: 7934b4ee00a8d1d4aab8b6401b736dad, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: b57fa79eb130dd94a8bdbcf4d71f8a25, type: 2}
+    - target: {fileID: 5866666021909216657, guid: 7934b4ee00a8d1d4aab8b6401b736dad, type: 3}
+      propertyPath: m_ApplyRootMotion
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 7934b4ee00a8d1d4aab8b6401b736dad, type: 3}
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
