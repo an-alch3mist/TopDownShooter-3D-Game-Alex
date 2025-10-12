@@ -358,7 +358,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 100950250}
-  m_LocalRotation: {x: 0.27629337, y: 0.6392361, z: -0.26478022, w: 0.6670313}
+  m_LocalRotation: {x: 0.27629337, y: 0.6392361, z: -0.26478028, w: 0.66703117}
   m_LocalPosition: {x: 1.0036204, y: 4, z: -0.17014885}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -2978,7 +2978,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
-  m_LocalRotation: {x: 0.27629337, y: 0.6392361, z: -0.26478022, w: 0.6670313}
+  m_LocalRotation: {x: 0.27629337, y: 0.6392361, z: -0.26478028, w: 0.66703117}
   m_LocalPosition: {x: 1.0036204, y: 4, z: -0.17014885}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
@@ -3777,6 +3777,7 @@ MonoBehaviour:
   _shotGun: {fileID: 1171615410}
   _sniper: {fileID: 2016574680}
   _LeftHandIK_Target: {fileID: 1054074395}
+  _rig: {fileID: 447571391}
 --- !u!1 &1241923618
 GameObject:
   m_ObjectHideFlags: 0
@@ -3882,7 +3883,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1272943121}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 4.569, y: 1.08, z: 0.384}
+  m_LocalPosition: {x: 4.569, y: 1.007, z: 0.384}
   m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
   m_Children: []
   m_Father: {fileID: 1363846700}
@@ -5617,6 +5618,7 @@ GameObject:
   - component: {fileID: 5866666020271397277}
   - component: {fileID: 919132147576215902}
   - component: {fileID: 919132147576215903}
+  - component: {fileID: 919132147576215904}
   m_Layer: 0
   m_Name: Bot @Rifle TPose --skin
   m_TagString: Untagged
@@ -5724,6 +5726,19 @@ MonoBehaviour:
   - m_Rig: {fileID: 447571391}
     m_Active: 1
   m_Effectors: []
+--- !u!114 &919132147576215904
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 919132147576215901}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 997ac939dd8612545a5ae22723fd4d7c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _weaponVisualController: {fileID: 1224622144}
 --- !u!4 &972334788643749315
 Transform:
   m_ObjectHideFlags: 0
