@@ -5,7 +5,7 @@ using UnityEngine.Animations.Rigging;
 
 using SPACE_UTIL;
 
-/*
+/* Event System
 	#region event subsribe approach
 	public static event EventHandler _subscribeChannel_WhenResourceCountAltered;
 	#endregion
@@ -32,8 +32,20 @@ namespace SPACE_TopDownShooter
 		public void ResetRigWeightForIK()
 		{
 			Debug.Log("AnimationEvent: ResetRigWeightForIK()".colorTag("cyan"));
-			this._weaponVisualController.TrueIncrRigWeight();
+			this._weaponVisualController.IncrRigWeight();
 		}
 
+		public void GrabAndSwitchWeapon()
+		{
+			Debug.Log("AnimationEvent: GrabAndSwitchWeapon()".colorTag("cyan"));
+			this._weaponVisualController.SwitchWeapon();
+			this._weaponVisualController.IncrRigWeight(0.1f);
+		}
+
+		public void CanGrabAgain()
+		{
+			Debug.Log("AnimationEvent: CanGrab()".colorTag("cyan"));
+			this._weaponVisualController.isGrabbing_Animator = false;
+		}
 	}
 }

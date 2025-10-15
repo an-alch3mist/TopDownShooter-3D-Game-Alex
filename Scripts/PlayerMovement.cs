@@ -123,9 +123,9 @@ namespace SPACE_TopDownShooter
 			float zVel = Z.dot(movementVel_xz.normalizedZero(), this.transform.forward);
 			// << independent on movementVel.y
 
-			this._animator.SetBool("isRunning", this.isRunning);
-			this._animator.SetFloat("xVel", xVel);
-			this._animator.SetFloat("zVel", zVel);
+			this._animator.SetBool(PlayerAnimParamType.isRunning.ToString(), this.isRunning);
+			this._animator.SetFloat(PlayerAnimParamType.xVel.ToString(), xVel);
+			this._animator.SetFloat(PlayerAnimParamType.zVel.ToString(), zVel);
 		}
 
 		[Header("just to log")]

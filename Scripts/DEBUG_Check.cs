@@ -8,6 +8,11 @@ public class DEBUG_Check : MonoBehaviour
 {
 	private void Update()
 	{
+		// this.NewInputSystem();
+	}
+
+	void NewInputSystem()
+	{
 		Keyboard keyboard = Keyboard.current;
 		/*
 			// instant down	: was pressed this frame
@@ -25,7 +30,7 @@ public class DEBUG_Check : MonoBehaviour
 
 
 		Mouse mouse = Mouse.current;
-		if(mouse != null)
+		if (mouse != null)
 		{
 			if (mouse.leftButton.wasPressedThisFrame) Debug.Log("mouse left instant down");
 			if (mouse.leftButton.wasReleasedThisFrame) Debug.Log("mouse left instant up");

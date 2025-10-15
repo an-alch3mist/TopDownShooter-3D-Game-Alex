@@ -26,12 +26,13 @@ namespace SPACE_TopDownShooter
 		void InitIAEvents()
 		{
 			var IA = this._playerInput.IA;
-			IA.Character.switchWeapon.performed += (ctx) => { this.SwitchWeapon(); };
+			IA.Character.switchWeapon.performed += (ctx) => { this.GrabWeapon(); /*this.SwitchWeapon();*/ };
 			IA.Character.reloadWeapon.performed += (ctx) => { this.ReloadWeapon(); };
+			// IA.Character.grabWeapon.performed += (ctx) => { this.GrabWeapon(); };
 		}
 
 
-		#region wont work
+		#region _rig.weight assignment wont work
 		/* console
 		// wont work 
 			1
@@ -58,10 +59,7 @@ namespace SPACE_TopDownShooter
 
 		#endregion
 
-
-
-
-		#region works with late
+		#region _rig.weight assignment wont work works with late update over time
 		/* works 
 			1
 			1
@@ -94,28 +92,36 @@ namespace SPACE_TopDownShooter
 			this.shouldIncrRigWeight = true;
 			this._rig.weight = 0.95f;
 		}
-		*/ 
+		*/
 		#endregion
 
-
-
-		// Always perform _rig.weight with a +1 frame with the help of IEnumerator
-		public void TrueIncrRigWeight()
-		{
-			StartCoroutine(RestoreRigWeightCoroutine());
-		}
 		private void Update()
 		{
 			Debug.Log(this._rig.weight);
+
+			/*
+			// refer: ./Scripts/UnityLifeCycle - RigWeightUpdateCause.md
+			if(INPUT.K.InstantDown(KeyCode.I))
+			{
+				Debug.Log("InstantDown I");
+				_rig.weight = 1f;
+			}
+			*/
 		}
-		IEnumerator RestoreRigWeightCoroutine()
+
+
+		// Event Call >>
+		// refer: ./Scripts/UnityLifeCycle - RigWeightUpdateCause.md
+		public void IncrRigWeight(float duration = 0.3f)
+		{
+			// Debug.Log("called TrueIncrRigWeight()");
+			StartCoroutine(RestoreRigWeightCoroutine(duration:duration));
+		}
+		IEnumerator RestoreRigWeightCoroutine(float duration)
 		{
 			yield return null; // Wait one frame for Animation Rigging to finish
-			
-			// _rig.weight = 1f; it works with even if _rig.weight called here
-			// wherever _rig Involved use IEnumerator with 1 frame delay
 
-			float duration = 0.3f; // Smooth transition over 0.3 seconds
+			// float duration = 0.3f; // ad: linear transition over 0.3 seconds
 			float elapsed = 0f;
 
 			while (elapsed < duration)
@@ -128,7 +134,7 @@ namespace SPACE_TopDownShooter
 			_rig.weight = 1f;
 		}
 
-
+		// << Event Call
 
 		Transform[] WEAPON; 
 		void InitWEAPON()
@@ -153,7 +159,20 @@ namespace SPACE_TopDownShooter
 			this._LeftHandIK_Target.eulerAngles = LeftIKTarget_fromID.eulerAngles;
 		}
 
-		void SwitchWeapon()
+		public bool isGrabbing_Animator
+		{
+			get
+			{
+				return this._animator.GetBool(PlayerAnimParamType.isGrabbing.ToString());
+			}
+			set
+			{
+				this._animator.SetBool(PlayerAnimParamType.isGrabbing.ToString(), value);
+			}
+		}
+
+		// called from animation event
+		public void SwitchWeapon()
 		{
 			currIndex = (currIndex + 1) % this.WEAPON.Length;
 			for (int i0 = 0; i0 < WEAPON.Length; i0 += 1)
@@ -170,15 +189,38 @@ namespace SPACE_TopDownShooter
 
 			if (currIndex == 3) _animator.SetLayerWeight(layerIndex: 2, 1f); // shotgun layer
 			else				_animator.SetLayerWeight(layerIndex: 1, 1f); // rifle pr common layer
-			// << anim layer
-
+																			 // << anim layer
 		}
 
 		void ReloadWeapon()
 		{
-			_rig.weight = 0f; // disable aim, IK constraint
-			this._animator.SetTrigger("reload");
+			this.PauseAutoRig();
+			this._animator.SetTrigger(PlayerAnimParamType.reload.ToString());
 		}
-	}
 
+		void GrabWeapon()
+		{
+			if (this.isGrabbing_Animator == true)
+				return;
+
+			DisableAllWeapon();
+			this.PauseAutoRig();
+			this._animator.SetTrigger(PlayerAnimParamType.weaponGrab.ToString());
+			// this._animator.SetBool(PlayerAnimParamType.isGrabbing.ToString(), true);
+			this.isGrabbing_Animator = true;
+		}
+
+		#region util
+		private void PauseAutoRig()
+		{
+			_rig.weight = 0f; // disable aim, IK constraint
+		}
+
+		void DisableAllWeapon()
+		{
+			for (int i0 = 0; i0 < WEAPON.Length; i0 += 1)
+				this.WEAPON[i0].gameObject.SetActive(false);
+		}
+		#endregion
+	}
 }

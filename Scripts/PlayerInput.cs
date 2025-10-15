@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+using SPACE_UTIL;
+
 namespace SPACE_TopDownShooter
 {
 	public class PlayerInput : MonoBehaviour
@@ -11,6 +13,13 @@ namespace SPACE_TopDownShooter
 		{
 			Debug.Log("Awake(): " + this);
 			this.IA = new PlayerInputActions();
+		}
+
+		private void Start()
+		{
+			// check >>
+	
+			// << check
 		}
 
 		private void OnEnable()
