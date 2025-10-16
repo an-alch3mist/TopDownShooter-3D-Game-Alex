@@ -10,6 +10,7 @@ namespace SPACE_TopDownShooter
 		weaponGrab,
 		isRunning,
 		isGrabbing,
+		isReloading,
 		weaponGrabType,
 		xVel,
 		zVel,

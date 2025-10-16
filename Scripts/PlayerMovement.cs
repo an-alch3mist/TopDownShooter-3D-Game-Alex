@@ -69,7 +69,6 @@ namespace SPACE_TopDownShooter
 				// << just to log + aim rig
 			}
 			#endregion
-			
 
 			//
 			this.HandleAnimationControllerXZ();
@@ -80,7 +79,7 @@ namespace SPACE_TopDownShooter
 		{
 			this.movementVel =
 				(transform.right * this.inputMovementDir.x +
-				 transform.forward * this.inputMovementDir.y) * (this.isRunning ? this._floorRunMovementSpeed : this._floorWalkMovementSpeed) * Time.deltaTime;
+				 transform.forward * this.inputMovementDir.y) * (this.isRunning_Animator ? this._floorRunMovementSpeed : this._floorWalkMovementSpeed) * Time.deltaTime;
 		}
 		void HandleAirMovement()
 		{
@@ -123,16 +122,27 @@ namespace SPACE_TopDownShooter
 			float zVel = Z.dot(movementVel_xz.normalizedZero(), this.transform.forward);
 			// << independent on movementVel.y
 
-			this._animator.SetBool(PlayerAnimParamType.isRunning.ToString(), this.isRunning);
 			this._animator.SetFloat(PlayerAnimParamType.xVel.ToString(), xVel);
 			this._animator.SetFloat(PlayerAnimParamType.zVel.ToString(), zVel);
 		}
 
 		[Header("just to log")]
 		[SerializeField] Vector2 inputMovementDir;
-		[SerializeField] bool isRunning;
-		Vector3 movementVel;
 		[SerializeField] Vector2 inputAimDir;
+		Vector3 movementVel;
+
+		public bool isRunning_Animator
+		{
+			get
+			{
+				return this._animator.GetBool(PlayerAnimParamType.isRunning.ToString());
+			}
+			set
+			{
+				this._animator.SetBool(PlayerAnimParamType.isRunning.ToString(), value);
+			}
+		}
+
 		#region InitIAEvents
 		void InitIAEvents()
 		{
@@ -144,8 +154,8 @@ namespace SPACE_TopDownShooter
 			_IA.Character.Aim.performed += ctx => this.inputAimDir = ctx.ReadValue<Vector2>();
 			_IA.Character.Aim.canceled += ctx => this.inputMovementDir = Vector2.zero;
 
-			_IA.Character.Run.performed += (ctx) => { this.isRunning = true; };
-			_IA.Character.Run.canceled += (ctx) => { this.isRunning = false; };
+			_IA.Character.Run.performed += (ctx) => { this.isRunning_Animator = true; };
+			_IA.Character.Run.canceled += (ctx) => { this.isRunning_Animator = false; };
 		}
 		#endregion
 	}

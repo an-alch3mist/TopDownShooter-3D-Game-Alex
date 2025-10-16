@@ -8,7 +8,7 @@ using SPACE_TopDownShooter.ID;
 
 namespace SPACE_TopDownShooter
 {
-	public class WeaponVisualController : MonoBehaviour
+	public class PlayerWeaponVisualsController : MonoBehaviour
 	{
 		[SerializeField] PlayerInput _playerInput;
 		[SerializeField] Animator _animator;
@@ -97,7 +97,7 @@ namespace SPACE_TopDownShooter
 
 		private void Update()
 		{
-			Debug.Log(this._rig.weight);
+			// Debug.Log(this._rig.weight);
 
 			/*
 			// refer: ./Scripts/UnityLifeCycle - RigWeightUpdateCause.md
@@ -134,6 +134,50 @@ namespace SPACE_TopDownShooter
 			_rig.weight = 1f;
 		}
 
+		// Event + Util Call
+		public bool isReloading_Animator
+		{
+			get
+			{
+				return this._animator.GetBool(PlayerAnimParamType.isReloading.ToString());
+			}
+			set
+			{
+				this._animator.SetBool(PlayerAnimParamType.isReloading.ToString(), value);
+			}
+		}
+		public bool isGrabbing_Animator
+		{
+			get
+			{
+				return this._animator.GetBool(PlayerAnimParamType.isGrabbing.ToString());
+			}
+			set
+			{
+				this._animator.SetBool(PlayerAnimParamType.isGrabbing.ToString(), value);
+			}
+		}
+
+		public void SwitchWeaponAndAnimLayer()
+		{
+			this.currIndex = (currIndex + 1) % this.WEAPON.Length;
+			for (int i0 = 0; i0 < WEAPON.Length; i0 += 1)
+			{
+				if (i0 == currIndex) this.WEAPON[i0].gameObject.SetActive(true);
+				else this.WEAPON[i0].gameObject.SetActive(false);
+			}
+
+			// set IK LeftHand Target
+			this.SetIKWeapon();
+
+			// anim layer >>
+			for (int i0 = 1; i0 < _animator.layerCount; i0 += 1)
+				_animator.SetLayerWeight(i0, 0f);
+
+			if (this.currIndex == 3) _animator.SetLayerWeight(layerIndex: 2, 1f); // shotgun layer
+			else					 _animator.SetLayerWeight(layerIndex: 1, 1f); // rifle common layer
+			// << anim layer
+		}
 		// << Event Call
 
 		Transform[] WEAPON; 
@@ -148,7 +192,7 @@ namespace SPACE_TopDownShooter
 				this._sniper,
 			};
 			this.currIndex = -1;
-			this.SwitchWeapon();
+			this.SwitchWeaponAndAnimLayer();
 		}
 
 		int currIndex;
@@ -159,55 +203,30 @@ namespace SPACE_TopDownShooter
 			this._LeftHandIK_Target.eulerAngles = LeftIKTarget_fromID.eulerAngles;
 		}
 
-		public bool isGrabbing_Animator
-		{
-			get
-			{
-				return this._animator.GetBool(PlayerAnimParamType.isGrabbing.ToString());
-			}
-			set
-			{
-				this._animator.SetBool(PlayerAnimParamType.isGrabbing.ToString(), value);
-			}
-		}
-
 		// called from animation event
-		public void SwitchWeapon()
-		{
-			currIndex = (currIndex + 1) % this.WEAPON.Length;
-			for (int i0 = 0; i0 < WEAPON.Length; i0 += 1)
-			{
-				if (i0 == currIndex) this.WEAPON[i0].gameObject.SetActive(true);
-				else this.WEAPON[i0].gameObject.SetActive(false);
-			}
-
-			this.SetIKWeapon();
-
-			// anim layer >>
-			for (int i0 = 1; i0 < _animator.layerCount; i0 += 1)
-				_animator.SetLayerWeight(i0, 0f);
-
-			if (currIndex == 3) _animator.SetLayerWeight(layerIndex: 2, 1f); // shotgun layer
-			else				_animator.SetLayerWeight(layerIndex: 1, 1f); // rifle pr common layer
-																			 // << anim layer
-		}
 
 		void ReloadWeapon()
 		{
+			if (this.isGrabbing_Animator == true || this.isReloading_Animator == true)
+				return;
+
 			this.PauseAutoRig();
 			this._animator.SetTrigger(PlayerAnimParamType.reload.ToString());
+
+			// all navigation to weaponGrab, reload, shoot are disabled
+			this.isReloading_Animator = true;
 		}
 
 		void GrabWeapon()
 		{
-			if (this.isGrabbing_Animator == true)
+			if (this.isGrabbing_Animator == true || this.isReloading_Animator == true)
 				return;
 
-			DisableAllWeapon();
 			this.PauseAutoRig();
 			this._animator.SetTrigger(PlayerAnimParamType.weaponGrab.ToString());
-			// this._animator.SetBool(PlayerAnimParamType.isGrabbing.ToString(), true);
-			this.isGrabbing_Animator = true;
+
+			// all navigation to weaponGrab, reload, shoot are disabled
+			this.isGrabbing_Animator = true; // this._animator.SetBool(PlayerAnimParamType.isGrabbing.ToString(), true);
 		}
 
 		#region util

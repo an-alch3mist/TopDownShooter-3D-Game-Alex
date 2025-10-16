@@ -27,25 +27,30 @@ namespace SPACE_TopDownShooter
 {
 	public class PlayerAnimationEventsManager : MonoBehaviour
 	{
-		[SerializeField] WeaponVisualController _weaponVisualController;
+		[SerializeField] PlayerWeaponVisualsController _playerWeaponVisualsController;
 
 		public void ResetRigWeightForIK()
 		{
 			Debug.Log("AnimationEvent: ResetRigWeightForIK()".colorTag("cyan"));
-			this._weaponVisualController.IncrRigWeight();
+			this._playerWeaponVisualsController.IncrRigWeight(duration: 0.05f);
 		}
 
-		public void GrabAndSwitchWeapon()
+		public void DoneWithReloading()
+		{
+			Debug.Log("Animation Event: DoneWithReloading()".colorTag("cyan"));
+			this._playerWeaponVisualsController.isReloading_Animator = false;
+		}
+
+		public void SwitchWeapon()
 		{
 			Debug.Log("AnimationEvent: GrabAndSwitchWeapon()".colorTag("cyan"));
-			this._weaponVisualController.SwitchWeapon();
-			this._weaponVisualController.IncrRigWeight(0.1f);
+			this._playerWeaponVisualsController.SwitchWeaponAndAnimLayer();
 		}
 
-		public void CanGrabAgain()
+		public void DoneWithGrabbing()
 		{
 			Debug.Log("AnimationEvent: CanGrab()".colorTag("cyan"));
-			this._weaponVisualController.isGrabbing_Animator = false;
+			this._playerWeaponVisualsController.isGrabbing_Animator = false;
 		}
 	}
 }

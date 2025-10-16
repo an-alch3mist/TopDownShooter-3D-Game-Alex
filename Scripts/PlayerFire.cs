@@ -7,6 +7,7 @@ namespace SPACE_TopDownShooter
 	{
 		[SerializeField] PlayerInput _playerInput;
 		[SerializeField] Animator _animator;
+		[SerializeField] PlayerWeaponVisualsController _playerWeaponVisualsController;
 
 		private void Start()
 		{
@@ -25,14 +26,19 @@ namespace SPACE_TopDownShooter
 		#region Shoot
 		void HandleShoot()
 		{
+			if (this._playerWeaponVisualsController.isGrabbing_Animator == true || 
+				this._playerWeaponVisualsController.isReloading_Animator == true)
+				return;
+
 			Debug.Log("Shoot()");
 			this.HandleAnimationControllerShoot();
 		}
-		#endregion
 
 		void HandleAnimationControllerShoot()
 		{
 			this._animator.SetTrigger(PlayerAnimParamType.fire.ToString());
 		}
+		#endregion
+
 	}
 }
