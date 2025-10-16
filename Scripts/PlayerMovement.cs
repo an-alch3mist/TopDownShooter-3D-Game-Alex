@@ -13,8 +13,7 @@ namespace SPACE_TopDownShooter
 		private CharacterController _characterC;
 		[SerializeField] float _floorWalkMovementSpeed = 2f;
 		[SerializeField] float _floorRunMovementSpeed = 5.5f;
-		[SerializeField] float _floorRotateSpeed = 10f;
-		[SerializeField] float _botHeight = 1.8f;
+		[SerializeField] float _floorRotateSpeed = 10f; // i,e: 10f per second -> 0.16 per frame
 
 		[SerializeField] PlayerInput _playerInput;
 		[SerializeField] PlayerAimCalculation _playerAimCalculation;
@@ -22,6 +21,7 @@ namespace SPACE_TopDownShooter
 
 		Line dirLine;
 
+		#region Unity LifeCycle
 		private void Start()
 		{
 			Debug.Log("Start(): " + this);
@@ -52,16 +52,21 @@ namespace SPACE_TopDownShooter
 			// Uses the aim position that was calculated in the previous frame's LateUpdate
 			this.HandleRotation();
 		}
+		#endregion
 
+		#region private API
+		#region HandeRotation
 		void HandleRotation()
 		{
 			Vector3 targetAim = _playerAimCalculation.getAimPos;
+			Vector3 n = targetAim.xz() - this.transform.position.xz();
 			Vector3 targetDir = targetAim - this.transform.position; targetDir.y = 0f;
 			this.transform.rotation = Quaternion.Slerp(
 				this.transform.rotation,
 				Quaternion.LookRotation(targetDir),
 				t: this._floorRotateSpeed * Time.deltaTime);
-		}
+		} 
+		#endregion
 
 		#region HandleFloorMovement, HandleAirMovement
 		void HandleFloorMovement()
@@ -72,7 +77,7 @@ namespace SPACE_TopDownShooter
 		}
 		void HandleAirMovement()
 		{
-			if(this._characterC.isGrounded == false)
+			if (this._characterC.isGrounded == false)
 				this.movementVel.y += -5f * Time.deltaTime;
 			else
 				this.movementVel.y = -0.1f * Time.deltaTime; // movementVel.xz glitch, if movementVel.y = 0f zero (no longer the case if AnimationController just depend on the .xz of movementVel)
@@ -118,19 +123,6 @@ namespace SPACE_TopDownShooter
 		[Header("just to log")]
 		[SerializeField] Vector2 inputMovementDir;
 		Vector3 movementVel;
-
-		public bool isRunning_Animator
-		{
-			get
-			{
-				return this._animator.GetBool(PlayerAnimParamType.isRunning.ToString());
-			}
-			set
-			{
-				this._animator.SetBool(PlayerAnimParamType.isRunning.ToString(), value);
-			}
-		}
-
 		#region InitIAEvents
 		void InitIAEvents()
 		{
@@ -142,6 +134,22 @@ namespace SPACE_TopDownShooter
 			_IA.Character.Run.performed += (ctx) => { this.isRunning_Animator = true; };
 			_IA.Character.Run.canceled += (ctx) => { this.isRunning_Animator = false; };
 		}
+		#endregion
+
+		#endregion
+
+		#region public API
+		public bool isRunning_Animator
+		{
+			get
+			{
+				return this._animator.GetBool(PlayerAnimParamType.isRunning.ToString());
+			}
+			set
+			{
+				this._animator.SetBool(PlayerAnimParamType.isRunning.ToString(), value);
+			}
+		} 
 		#endregion
 	}
 }

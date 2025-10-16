@@ -3804,7 +3804,6 @@ MonoBehaviour:
   _floorWalkMovementSpeed: 2
   _floorRunMovementSpeed: 5.5
   _floorRotateSpeed: 10
-  _botHeight: 1.8
   _playerInput: {fileID: 1742264838}
   _playerAimCalculation: {fileID: 1742264843}
   _animator: {fileID: 5866666020271397277}
@@ -3880,6 +3879,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 3072
   _aimTr: {fileID: 1143808658}
+  _playerTr: {fileID: 1742264837}
 --- !u!1 &1783893034
 GameObject:
   m_ObjectHideFlags: 0
