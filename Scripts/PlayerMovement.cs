@@ -13,6 +13,7 @@ namespace SPACE_TopDownShooter
 		private CharacterController _characterC;
 		[SerializeField] float _floorWalkMovementSpeed = 2f;
 		[SerializeField] float _floorRunMovementSpeed = 5.5f;
+		[SerializeField] float _floorRotateSpeed = 10f;
 		[SerializeField] float _botHeight = 1.8f;
 		[SerializeField] LayerMask _aimLayer;
 
@@ -24,6 +25,7 @@ namespace SPACE_TopDownShooter
 
 		private void Start()
 		{
+			Application.targetFrameRate = 60;
 			Debug.Log("Start(): " + this);
 			this.InitIAEvents();
 
@@ -46,9 +48,17 @@ namespace SPACE_TopDownShooter
 			dirLine.b = this.transform.position + this.movementVel * 10;
 			#endregion
 
-			
-			#region transform.rotation
-			Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+			this.HandleMouseAimAndRotation();
+			//
+			this.HandleAnimationControllerXZ();
+		}
+
+		#region GetMousePos
+		Vector3 prevTargetAim;
+		Vector3 GetTargetMousePos()
+		{
+			Ray ray = Camera.main.ScreenPointToRay(this.inputAimPos);
 			if (Physics.Raycast(ray, out var hitInfo, (float)1e3, this._aimLayer) == true)
 			{
 				// just to log + aim rig >>
@@ -60,19 +70,30 @@ namespace SPACE_TopDownShooter
 				};
 
 				float dist = Vector3.Magnitude(targerAim.xz() - this.transform.position.xz());
-				if (dist > 0.5f)
+				if (dist > 0.2f)
 				{
-					Vector3 targetDir = hitInfo.point - this.transform.position; targetDir.y = 0f;
-					this.transform.rotation = Quaternion.LookRotation(targetDir);
-					this.aimTr.position = targerAim;
+					prevTargetAim = targerAim;
+					return targerAim;
 				}
+
 				// << just to log + aim rig
 			}
-			#endregion
+			return prevTargetAim;
+		} 
+		#endregion
 
-			//
-			this.HandleAnimationControllerXZ();
+		void HandleMouseAimAndRotation()
+		{
+			Vector3 targetAim = GetTargetMousePos();
+			Vector3 targetDir = GetTargetMousePos() - this.transform.position; targetDir.y = 0f;
+			this.transform.rotation = Quaternion.Slerp(
+				this.transform.rotation,
+				Quaternion.LookRotation(targetDir),
+				t: this._floorRotateSpeed * Time.deltaTime);
+
+			this.aimTr.position = targetAim;
 		}
+
 
 		#region HandleFloorMovement, HandleAirMovement
 		void HandleFloorMovement()
@@ -128,7 +149,7 @@ namespace SPACE_TopDownShooter
 
 		[Header("just to log")]
 		[SerializeField] Vector2 inputMovementDir;
-		[SerializeField] Vector2 inputAimDir;
+		[SerializeField] Vector2 inputAimPos;
 		Vector3 movementVel;
 
 		public bool isRunning_Animator
@@ -148,11 +169,11 @@ namespace SPACE_TopDownShooter
 		{
 			var _IA = this._playerInput.IA;
 
-			_IA.Character.Movement.performed += ctx => this.inputMovementDir = ctx.ReadValue<Vector2>();
-			_IA.Character.Movement.canceled += ctx => this.inputMovementDir = Vector2.zero;
+			_IA.Character.Movement.performed += (ctx) => this.inputMovementDir = ctx.ReadValue<Vector2>();
+			_IA.Character.Movement.canceled += (ctx) => this.inputMovementDir = Vector2.zero;
 
-			_IA.Character.Aim.performed += ctx => this.inputAimDir = ctx.ReadValue<Vector2>();
-			_IA.Character.Aim.canceled += ctx => this.inputMovementDir = Vector2.zero;
+			_IA.Character.Aim.performed += (ctx) => this.inputAimPos = ctx.ReadValue<Vector2>();
+			_IA.Character.Aim.canceled += (ctx) => this.inputAimPos = Vector2.zero;
 
 			_IA.Character.Run.performed += (ctx) => { this.isRunning_Animator = true; };
 			_IA.Character.Run.canceled += (ctx) => { this.isRunning_Animator = false; };
