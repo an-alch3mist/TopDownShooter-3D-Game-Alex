@@ -51,6 +51,8 @@ namespace SPACE_TopDownShooter
 			// Rotation happens last in Update
 			// Uses the aim position that was calculated in the previous frame's LateUpdate
 			this.HandleRotation();
+
+			Debug.Log(this._playerAimCalculation.hitInfo.collider);
 		}
 		#endregion
 

@@ -19,6 +19,7 @@ namespace SPACE_TopDownShooter
 		[SerializeField] Transform _playerTr;
 
 		public Vector3 getAimPos { get { return this._aimTr.position; } }
+		public RaycastHit hitInfo { get; private set; }
 
 		#region Unity Life Cycle
 		private void Start()
@@ -34,7 +35,7 @@ namespace SPACE_TopDownShooter
 
 			_IA.Character.Aim.performed += (ctx) => this.inputAimPos = ctx.ReadValue<Vector2>();
 			_IA.Character.Aim.canceled += (ctx) => this.inputAimPos = Vector2.zero;
-		} 
+		}
 
 		private void LateUpdate()
 		{
@@ -56,6 +57,12 @@ namespace SPACE_TopDownShooter
 					y = botHeight * 0.75f,
 				};
 				this._aimTr.position = targerAimPos;
+				this.hitInfo = hitInfo;
+			}
+			else
+			{
+				this.hitInfo = new RaycastHit(); // noneHitInfo;
+				this._aimTr.position = this._aimTr.position; // at same position
 			}
 			#endregion
 		}
