@@ -198,7 +198,7 @@ namespace SPACE_TopDownShooter
 		int currIndex;
 		void SetIKWeapon()
 		{
-			Transform LeftIKTarget_fromID = this.WEAPON[currIndex].gameObject.GC_InLeaf<ID_LeftHandIKTarget>().transform;
+			Transform LeftIKTarget_fromID = this.WEAPON[currIndex].gameObject.GTr_Leaf<ID_LeftHandIKTarget>();
 			this._LeftHandIK_Target.position = LeftIKTarget_fromID.position;
 			this._LeftHandIK_Target.eulerAngles = LeftIKTarget_fromID.eulerAngles;
 		}

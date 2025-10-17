@@ -7,7 +7,7 @@ namespace SPACE_TopDownShooter
 {
 	public class PlayerInput : MonoBehaviour
 	{
-		public PlayerInputActions IA;
+		public PlayerInputActions IA { get; private set; }
 
 		private void Awake()
 		{

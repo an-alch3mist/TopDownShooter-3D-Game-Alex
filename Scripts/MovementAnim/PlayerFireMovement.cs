@@ -3,7 +3,7 @@ using System.Collections;
 
 namespace SPACE_TopDownShooter
 {
-	public class PlayerFire : MonoBehaviour
+	public class PlayerFireMovement : MonoBehaviour
 	{
 		[SerializeField] PlayerInput _playerInput;
 		[SerializeField] Animator _animator;
@@ -30,7 +30,6 @@ namespace SPACE_TopDownShooter
 				this._playerWeaponVisualsController.isReloading_Animator == true)
 				return;
 
-			Debug.Log("Shoot()");
 			this.HandleAnimationControllerShoot();
 		}
 
@@ -39,6 +38,5 @@ namespace SPACE_TopDownShooter
 			this._animator.SetTrigger(PlayerAnimParamType.fire.ToString());
 		}
 		#endregion
-
 	}
 }

@@ -54,7 +54,7 @@ namespace SPACE_TopDownShooter
 				{
 					x = hitInfo.point.x,
 					z = hitInfo.point.z,
-					y = botHeight * 0.75f,
+					y = hitInfo.point.y + botHeight * 0.75f,
 				};
 				this._aimTr.position = targerAimPos;
 				this.hitInfo = hitInfo;

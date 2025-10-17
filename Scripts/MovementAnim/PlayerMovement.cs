@@ -51,8 +51,6 @@ namespace SPACE_TopDownShooter
 			// Rotation happens last in Update
 			// Uses the aim position that was calculated in the previous frame's LateUpdate
 			this.HandleRotation();
-
-			Debug.Log(this._playerAimCalculation.hitInfo.collider);
 		}
 		#endregion
 
@@ -61,8 +59,8 @@ namespace SPACE_TopDownShooter
 		void HandleRotation()
 		{
 			Vector3 targetAim = _playerAimCalculation.getAimPos;
-			Vector3 n = targetAim.xz() - this.transform.position.xz();
-			Vector3 targetDir = targetAim - this.transform.position; targetDir.y = 0f;
+			Vector3 targetDir = targetAim.xz() - this.transform.position.xz();
+
 			this.transform.rotation = Quaternion.Slerp(
 				this.transform.rotation,
 				Quaternion.LookRotation(targetDir),
